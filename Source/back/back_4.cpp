@@ -2,8 +2,7 @@
 
 constexpr int MAX = 9;
 int arr[MAX] = {0};
-bool visited[MAX] = {0};
-int M, N; // M : Depth, M : Number
+int M, N;
 
 void dfs(int num, int count)
 {
@@ -16,21 +15,13 @@ void dfs(int num, int count)
     }
     for (int i = num; i <= N; i++)
     {
-        if (!visited[i])
-        {
-            visited[i] = true;
-            arr[count] = i;
-            dfs(i + 1, count + 1);
-            visited[i] = false;
-        }
+        arr[count] = i;
+        dfs(i, count + 1);
     }
 }
 
 int main()
 {
-    std::cin.tie(NULL);
-    std::ios::sync_with_stdio(false);
-
     std::cin >> N >> M;
     dfs(1, 0);
 }
