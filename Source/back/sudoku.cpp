@@ -1,46 +1,40 @@
 #include <iostream>
+#include <utility>
+#include <vector>
 
-bool nums[10] = {0};
 int board[9][9];
-void init()
+std::vector<std::pair<int, int>> points;
+int count = 0;
+bool found = false;
+
+bool check(std::pair<int, int> p)
 {
-    for (int i = 1; i <= 9; i++)
-    {
-        nums[i] = false;
-    }
-}
-void check(int x, int y)
-{
+    int square_x = p.first / 3;
+    int square_y = p.second / 3;
     for (int i = 0; i < 9; i++)
     {
-        nums[board[x][i]] = true;
-        nums[board[i][y]] = true;
+        if (board[p.first][i] == board[p.first][p.second] && i != p.second)
+            return false;
+        if (board[i][p.second] == board[p.first][p.second] && i != p.first)
+            return false;
     }
-
-    for (int i = 0; i < 3; i++)
+    for (int i = 3 * square_x; i < 3 * square_x + 3; i++)
     {
-        for (int j = 0; j < 3; j++)
+        for (int j = 3 * square_y; j < 3 * square_y + 3; j++)
         {
-            nums[board[(x / 3) * 3 + i][(y / 3) * 3 + j]] = true;
-        }
-    }
-}
-
-bool complete()
-{
-    for (int i = 0; i < 9; i++)
-    {
-        for (int j = 0; j < 9; j++)
-        {
-            if (board[i][j] == 0)
-                return false;
+            if (board[i][j] == board[p.first][p.second])
+            {
+                if (i != p.first && j != p.second)
+                    return false;
+            }
         }
     }
     return true;
 }
-void dfs()
+
+void sudoku(int N)
 {
-    if (complete())
+    if (N == count)
     {
         for (int i = 0; i < 9; i++)
         {
@@ -50,46 +44,37 @@ void dfs()
             }
             std::cout << '\n';
         }
-
+        found = true;
         return;
     }
-    else
+    for (int j = 0; j <= 9; j++)
     {
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                if (board[i][j] == 0)
-                {
-                    for (int k = 1; k <= 9; k++)
-                    {
-                        check(i, j);
-                        if (!nums[k])
-                        {
-                            board[i][j] = k;
-                            init();
-                            dfs();
-                        }
-                        init();
-                    }
-                }
-            }
-        }
+        board[points[N].first][points[N].second] = j;
+        if (check(points[N]))
+            sudoku(N + 1);
+        if (found)
+            return;
     }
-}
 
+    board[points[N].first][points[N].second] = 0;
+    return;
+}
 int main()
 {
-    std::cin.tie(NULL);
-    std::ios::sync_with_stdio(false);
-
+    std::pair<int, int> point;
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
         {
             std::cin >> board[i][j];
+            if (board[i][j] == 0)
+            {
+                count++;
+                point.first = i;
+                point.second = j;
+                points.push_back(point);
+            }
         }
     }
-    init();
-    dfs();
+    sudoku(0);
 }
