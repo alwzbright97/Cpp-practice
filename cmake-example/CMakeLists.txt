@@ -19,4 +19,4 @@ target_link_libraries(program shape)
 
 # target_compile_options(program PUBLIC -Wall -Werror)
 
-# target_include_directories(program PUBLIC ${CMAKE_SOURCE_DIR}/includes)
+# target_include_directories(program PUBLIC ${CMAKE_SOURCE_DIR}/include)
