@@ -1,41 +1,43 @@
 #include <iostream>
-#include <vector>
 
 constexpr int MAX = 15;
+int N, count = 0;
+int chessboard[MAX];
 
-int N;
-int count = 0;
-int col[MAX];
-
-bool check(int num_queen)
-{
-    for (int i = 0; i < num_queen; i++)
-    {
-        if (col[i] == col[num_queen] || std::abs(col[num_queen] - col[i]) == num_queen - i)
-            return false;
-    }
-    return true;
+bool isOkay(int n) {
+  for (int i = 0; i < n; i++) {
+    if (chessboard[i] == chessboard[n] ||
+        std::abs(chessboard[n] - chessboard[i]) == n - i)
+      return false;
+  }
+  return true;
 }
 
-void n_queen(int num_queen)
-{
-    if (num_queen == N)
-    {
-        count++;
+void nQueen(int n) {
+  if (n == N) {
+    count++;
+    return;
+  }
+
+  for (int i = 0; i < N; i++) {
+    chessboard[n] = i;
+    if (isOkay(n)) {
+      nQueen(n + 1);
     }
-    else
-    {
-        for (int i = 0; i < N; i++)
-        {
-            col[num_queen] = i;
-            if (check(num_queen))
-                n_queen(num_queen + 1);
-        }
-    }
+  }
+
+  return;
 }
-int main()
-{
-    std::cin >> N;
-    n_queen(0);
-    std::cout << count;
+
+int main() {
+  std::cin.tie(NULL);
+  std::cout.tie(NULL);
+  std::ios::sync_with_stdio(false);
+
+  std::cin >> N;
+
+  nQueen(0);
+  std::cout << count;
+
+  return 0;
 }
