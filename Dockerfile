@@ -24,6 +24,16 @@ RUN apt-get update && \
     ca-certificates \
     sshfs
 
+    # For Clickhouse-client / nanobdc
+RUN apt-get install -y \    
+    ninja-build \
+    libpoco-dev \
+    unixodbc-dev \
+    libicu-dev \
+    libzstd-dev \
+    liblz4-dev \
+    libabsl-dev
+
 RUN mkdir -p ~/Cpp-practice
 RUN mkdir -p ~/CS-Study
 RUN mkdir -p ~/.ssh
@@ -55,4 +65,5 @@ RUN cd /tmp && \
     ./bootstrap.sh --prefix=/usr/local && \
     ./b2 install && \
     rm -rf /tmp/*
+
 
